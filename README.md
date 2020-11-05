@@ -23,3 +23,9 @@
 [Exercise 8](https://github.com/JamesPeters98/VisualCPPEducation/commit/56ffb96d97c4c76d8f6dcf32c883edc6f8166993) - lobal variables - Scope resolution operator '::'
 
 [Exercise 9](https://github.com/JamesPeters98/VisualCPPEducation/commit/3f273ed3fdd175d886491b63a4f2809d658e2b2b) - Enumerations - Note: Type-safe enumerations are best to use to avoid errors, and to include multiple enums with the same variable names.
+
+[Exercise 10](https://github.com/JamesPeters98/VisualCPPEducation/commit/84f474c2e5cc05b8c65b2fc58c254d49642fd91c) - Namespaces
+
+[Exercise 11](https://github.com/JamesPeters98/VisualCPPEducation/commit/17e74073d88340bf69552faa16a44957a4abe0db) - Using namespaces
+
+[Chapter 2 Final Questions](https://github.com/JamesPeters98/VisualCPPEducation/commit/3844155e014a4f17f59813cb2b6c028679607a7e)
