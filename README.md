@@ -29,3 +29,22 @@
 [Exercise 11](https://github.com/JamesPeters98/VisualCPPEducation/commit/17e74073d88340bf69552faa16a44957a4abe0db) - Using namespaces
 
 [Chapter 2 Final Questions](https://github.com/JamesPeters98/VisualCPPEducation/commit/3844155e014a4f17f59813cb2b6c028679607a7e)
+
+## Chapter 3 - Decisions and Loops
+
+[Exercise 1](https://github.com/JamesPeters98/VisualCPPEducation/commit/355819da4cd07d071f42b49d63a5cfc02c6843ca) - Nested if statements
+
+[Exercise 2](https://github.com/JamesPeters98/VisualCPPEducation/commit/5de6fde47893110af07b3f1dc174bd78071ad001) - If else statements
+
+[Exercise 3](https://github.com/JamesPeters98/VisualCPPEducation/commit/a838f91b56a9dd07fd8bd4e4a1d8034b3f65e953) - Combing logical operators
+
+[Exercise 4](https://github.com/JamesPeters98/VisualCPPEducation/commit/630a95fa5abae82ce5568dc312d5a83febb6c0d1) - Conditional operator in output
+
+[Exercise 5](https://github.com/JamesPeters98/VisualCPPEducation/commit/92d403d443c86e77e4b013e84c3e60c577939647) - Switch statements - when initialising variables inside switch the case must be between braces.
+
+[Exercise 6](https://github.com/JamesPeters98/VisualCPPEducation/commit/3966afa21012beb945921902c9304b0c7b023b6f) - Sharing cases in switch statements - Has a cool way of selecting only lowercase letters
+
+[Exercise 9 & 10](https://github.com/JamesPeters98/VisualCPPEducation/commit/3576033f1bfbd8a4b455e859615cdf6c10d168cb) - Loops - Using multiple counters.
+Indefinite Loops and breaks.
+
+[Chapter 3 Final Questions](https://github.com/JamesPeters98/VisualCPPEducation/commit/ef859227a138e5e2a38970c5f91a777daf4426f0)
