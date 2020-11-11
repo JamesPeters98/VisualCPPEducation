@@ -240,53 +240,36 @@ void printError(char* str, size_t index)
 	cout << '^' << endl << endl;;
 }
 
+bool doOperation(char* str, const char* opStr, size_t& index, double& value, double (*op)(double))
+{
+	size_t opSize = strlen(opStr);
+	char* stringIndex = str + index;
+	if (0 == strncmp(opStr, stringIndex, opSize))
+	{
+		index += opSize - 1;
+		value = op(number(str, index));
+		return true;
+	}
+	return false;
+}
+
 // Checks if a valid function is at the index in the given string
 // If so it calculates the value and updates 'value'
 // Returns true if a function was calculated, false if not.
 bool doFunction(char* str, size_t& index, double& value)
 {
-	char* stringIndex = str + index;
-
 	// Radian trig functions
-	if (0 == strncmp("sin(", stringIndex, 4)) {
-		index += 3;
-		value = sin(number(str, index));
-		return true;
-	}
-	if (0 == strncmp("cos(", stringIndex, 4)) {
-		index += 3;
-		value = cos(number(str, index));
-		return true;
-	}
-	if (0 == strncmp("tan(", stringIndex, 4)) {
-		index += 3;
-		value = tan(number(str, index));
-		return true;
-	}
+	if (doOperation(str, "sin(", index, value, sin)) return true;
+	if (doOperation(str, "cos(", index, value, cos)) return true;
+	if (doOperation(str, "tan(", index, value, tan)) return true;
 
 	// Degree trig functions
-	if (0 == strncmp("sind(", stringIndex, 5)) {
-		index += 4;
-		value = sind(number(str, index));
-		return true;
-	}
-	if (0 == strncmp("cosd(", stringIndex, 5)) {
-		index += 4;
-		value = cosd(number(str, index));
-		return true;
-	}
-	if (0 == strncmp("tand(", stringIndex, 5)) {
-		index += 4;
-		value = tand(number(str, index));
-		return true;
-	}
+	if (doOperation(str, "sind(", index, value, sind)) return true;
+	if (doOperation(str, "cosd(", index, value, cosd)) return true;
+	if (doOperation(str, "tand(", index, value, tand)) return true;
 
 	// Exponential function
-	if (0 == strncmp("exp(", stringIndex, 4)) {
-		index += 3;
-		value = exp(number(str, index));
-		return true;
-	}
+	if (doOperation(str, "exp(", index, value, exp)) return true;
 	
 	return false;
 }
