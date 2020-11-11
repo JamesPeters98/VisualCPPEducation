@@ -11,6 +11,8 @@ double term(char* str, size_t& index);
 double number(char* str, size_t& index);
 char* extract(char* str, size_t& index);
 
+void printError(char* str, size_t index);
+
 int main()
 {
     const size_t MAX{ 80 };
@@ -75,6 +77,7 @@ double expr(char* str)
 			break;
 
 		default:
+			printError(str, index);
 			char message[38]{ "Expression evaluation error. Found: " };
 			strncat_s(message, str + index - 1, 1); // Append the character
 			throw message;			
@@ -123,6 +126,7 @@ double number(char* str, size_t& index)
 	// must be a digit
 	if(!isdigit(*(str + index)))
 	{
+		printError(str, index);
 		// Not a digit at start
 		char message[31]{ "Invalid character in number: " };
 		strncat_s(message, str + index, 1); //Adds char to message.
@@ -186,9 +190,27 @@ char* extract(char* str, size_t& index)
 	}
 	while (*(str + index++) != '\0');
 
+	printError(str, index);
 	throw "Ran off the end of the expression - must be bad input.";
 }
 
 
+// Creates a string with a '^' underneath the character at the given index
+void printError(char* str, size_t index)
+{
+	cout << endl;
+	cout << "Character at index " << index << " is bad: " << endl;
+	cout << str << endl;
+
+	// Add spaces until the given index is reached
+	size_t i{ 0 };
+	while (i < index)
+	{
+		cout << ' ';
+		i++;
+	}
+
+	cout << '^' << endl << endl;;
+}
 
 
