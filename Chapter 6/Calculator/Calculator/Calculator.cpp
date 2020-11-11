@@ -1,9 +1,20 @@
 // Calculator.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#define _USE_MATH_DEFINES
 #include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <math.h>
 
 using namespace std;
+
+/* TRIG FUNCTIONS*/
+const double DEGREE_TO_RADIAN = M_PI / 180;
+
+double sind(double degrees);
+double cosd(double degrees);
+double tand(double degrees);
 
 void eatspaces(char* str);
 double expr(char* str);
@@ -12,6 +23,8 @@ double number(char* str, size_t& index);
 char* extract(char* str, size_t& index);
 
 void printError(char* str, size_t index);
+
+bool doFunction(char* str, size_t& index, double& value);
 
 int main()
 {
@@ -128,14 +141,23 @@ double number(char* str, size_t& index)
 		return value; // Return substring value
 	}
 
-	// must be a digit
+	// Check for digit or function
 	if(!isdigit(*(str + index)))
 	{
-		printError(str, index);
-		// Not a digit at start
-		char message[31]{ "Invalid character in number: " };
-		strncat_s(message, str + index, 1); //Adds char to message.
-		throw message;
+		// Check if there is a function at the current index
+		// If so the function is resolved and value updated and returned.
+		if(doFunction(str, index, value))
+		{
+			return value;
+		}
+		else 
+		{
+			printError(str, index);
+			// Not a digit at start
+			char message[31]{ "Invalid character in number: " };
+			strncat_s(message, str + index, 1); //Adds char to message.
+			throw message;
+		}
 	}
 
 	// Creates a base 10 number starting from this digit.
@@ -217,5 +239,74 @@ void printError(char* str, size_t index)
 
 	cout << '^' << endl << endl;;
 }
+
+// Checks if a valid function is at the index in the given string
+// If so it calculates the value and updates 'value'
+// Returns true if a function was calculated, false if not.
+bool doFunction(char* str, size_t& index, double& value)
+{
+	char* stringIndex = str + index;
+
+	// Radian trig functions
+	if (0 == strncmp("sin(", stringIndex, 4)) {
+		index += 3;
+		value = sin(number(str, index));
+		return true;
+	}
+	if (0 == strncmp("cos(", stringIndex, 4)) {
+		index += 3;
+		value = cos(number(str, index));
+		return true;
+	}
+	if (0 == strncmp("tan(", stringIndex, 4)) {
+		index += 3;
+		value = tan(number(str, index));
+		return true;
+	}
+
+	// Degree trig functions
+	if (0 == strncmp("sind(", stringIndex, 5)) {
+		index += 4;
+		value = sind(number(str, index));
+		return true;
+	}
+	if (0 == strncmp("cosd(", stringIndex, 5)) {
+		index += 4;
+		value = cosd(number(str, index));
+		return true;
+	}
+	if (0 == strncmp("tand(", stringIndex, 5)) {
+		index += 4;
+		value = tand(number(str, index));
+		return true;
+	}
+
+	// Exponential function
+	if (0 == strncmp("exp(", stringIndex, 4)) {
+		index += 3;
+		value = exp(number(str, index));
+		return true;
+	}
+	
+	return false;
+}
+
+
+double sind(double degrees)
+{
+	return std::sin(degrees * DEGREE_TO_RADIAN);
+}
+
+double cosd(double degrees)
+{
+	return std::cos(degrees * DEGREE_TO_RADIAN);
+}
+
+double tand(double degrees)
+{
+	return std::tan(degrees * DEGREE_TO_RADIAN);
+}
+
+
 
 
