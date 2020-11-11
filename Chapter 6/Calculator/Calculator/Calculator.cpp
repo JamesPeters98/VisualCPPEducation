@@ -104,6 +104,11 @@ double term(char* str, size_t& index)
 			value /= number(str, ++index);
 		}
 
+		else if (*(str + index) == '^')
+		{
+			value = pow(value, number(str, ++index));
+		}
+
 		else break;
 	}
 
