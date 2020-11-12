@@ -10,6 +10,8 @@ struct Sample
 	char* sPtr = nullptr;
 };
 
+void printSample(Sample *sample);
+
 int main()
 {
 	char* p_str = new char[] {"Hello world!"};
@@ -46,4 +48,17 @@ int main()
 
 	std::cout << "After pointing new string to b.p_str" << std::endl;
 	std::cout << "string in a: " << a.sPtr << " & b: " << b.sPtr << std::endl;
+	std::cout << std::endl;
+
+	printSample(&a);
+	printSample(&b);
+}
+
+void printSample(Sample* sample)
+{
+	std::cout << "Printing sample: " << std::endl;
+	std::cout << "data1: " << sample->data1 << std::endl;
+	std::cout << "data2: " << sample->data2 << std::endl;
+	std::cout << "string: " << sample->sPtr << std::endl;
+	std::cout << std::endl;
 }
