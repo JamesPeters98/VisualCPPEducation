@@ -17,6 +17,12 @@ public:
 
 	String& operator=(const String& str);
 	String& operator=(String&& str);
+
+	String& operator+=(const String& str);
+	String& operator+=(const char* str);
+
+	String operator+(const String& str);
+	String operator+(const char* str);
 	
 	void print();
 	int length();
@@ -73,6 +79,35 @@ String& String::operator=(String&& str)
 	return *this;
 }
 
+String String::operator+(const String& str)
+{
+	size_t length = len + str.len + 1;
+	char* tempStr{ new char[length] };
+
+	strcpy_s(tempStr, length, string);
+	strcat_s(tempStr, length, str.string);
+	
+	return String(tempStr);
+}
+
+String String::operator+(const char* str)
+{
+	return *this + String(str);
+}
+
+String& String::operator+=(const char* str)
+{
+	*this = *this + str;
+	return *this;
+}
+
+String& String::operator+=(const String& str)
+{
+	*this = *this + str;
+	return *this;
+}
+
+
 void String::print()
 {
 	std::cout << string << std::endl;
@@ -92,6 +127,15 @@ int main()
 
 	String str2{ "Test String!" };
 	str2.print();
+
+	String str3{ str + " " + str2 };
+	str3.print();
+
+	str3 += " Test!";
+	str3 += " ";
+	str3 += str;
+
+	str3.print();
 	
 }
 
