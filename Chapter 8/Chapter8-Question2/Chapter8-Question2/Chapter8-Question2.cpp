@@ -12,9 +12,11 @@ private:
 public:
 	String(const char* data = "Default string");
 	String(const String& str);
+	String(String&& str);
 	~String();
 
 	String& operator=(const String& str);
+	String& operator=(String&& str);
 	
 	void print();
 	int length();
@@ -27,6 +29,13 @@ String::~String()
 	delete[] string;
 }
 
+String::String(String&& str)
+{
+	len = str.len;
+	string = str.string;
+	// Otherwise the string will be deleted by the deconstructor of str.
+	str.string = nullptr;
+}
 
 String::String(const char* data)
 {
@@ -44,10 +53,22 @@ String::String(const String& str)
 
 String& String::operator=(const String& str)
 {
+	if (this != &str)
+	{
+		len = str.len;
+		delete string;
+		string = new char[len + 1];
+		strcpy_s(string, len + 1, str.string);
+	}
+
+	return *this;
+}
+
+String& String::operator=(String&& str)
+{
 	len = str.len;
-	delete string;
-	string = new char[len + 1];
-	strcpy_s(string, len + 1, str.string);
+	string = str.string;
+	str.string = nullptr;
 
 	return *this;
 }
