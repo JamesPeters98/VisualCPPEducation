@@ -21,11 +21,27 @@ public:
     secondname = std::move(person.secondname);
   }
 
+  Person(const Person& other)
+	  : firstname(other.firstname),
+	  secondname(other.secondname)
+  {}
+
   // Less-than operator
   bool operator<(const Person& p)const
   {
     return (secondname < p.secondname ||
       ((secondname == p.secondname) && (firstname < p.firstname)));
+  }
+
+  friend bool operator==(const Person& lhs, const Person& rhs)
+  {
+	  return lhs.firstname == rhs.firstname
+		  && lhs.secondname == rhs.secondname;
+  }
+
+  friend bool operator!=(const Person& lhs, const Person& rhs)
+  {
+	  return !(lhs == rhs);
   }
 
   // Get the name
