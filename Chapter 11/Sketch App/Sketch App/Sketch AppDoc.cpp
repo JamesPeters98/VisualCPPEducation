@@ -12,6 +12,8 @@
 
 #include "Sketch AppDoc.h"
 
+
+#include <iostream>
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -39,6 +41,8 @@ BEGIN_MESSAGE_MAP(CSketchAppDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_ELEMENT_RECTANGLE, &CSketchAppDoc::OnUpdateElementRectangle)
 	ON_UPDATE_COMMAND_UI(ID_ELEMENT_CIRCLE, &CSketchAppDoc::OnUpdateElementCircle)
 	ON_UPDATE_COMMAND_UI(ID_ELEMENT_CURVE, &CSketchAppDoc::OnUpdateElementCurve)
+	ON_COMMAND(ID_ELEMENT_ELLIPSE, &CSketchAppDoc::OnElementEllipse)
+	ON_UPDATE_COMMAND_UI(ID_ELEMENT_ELLIPSE, &CSketchAppDoc::OnUpdateElementEllipse)
 END_MESSAGE_MAP()
 
 
@@ -201,25 +205,56 @@ void CSketchAppDoc::OnElementCurve()
 	m_Element = ElementType::CURVE;
 }
 
+void CSketchAppDoc::OnElementEllipse()
+{
+	m_Element = ElementType::ELLIPSE;
+}
+
+void CSketchAppDoc::onColourUpdates(CCmdUI* pCmdUI, ElementColour colour)
+{
+	pCmdUI->SetCheck(m_Color == colour);
+
+	CMenu* menu = pCmdUI->m_pMenu;
+	if (menu) {
+		// Select String from selected menu item.
+		CString str;
+		menu->GetMenuStringW(pCmdUI->m_nID, str, MF_BYCOMMAND);
+
+		// Create upper or lower case version of the string
+		CString newStr;
+		if (m_Color == colour)
+		{
+			newStr = str.MakeUpper();
+		} else
+		{
+			newStr = str.MakeLower();
+			newStr.SetAt(0, str.MakeUpper().GetAt(0));
+		}
+
+		// Set value of menu item text
+		pCmdUI->SetText(newStr);
+	}
+}
+
 
 void CSketchAppDoc::OnUpdateColourBlack(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetCheck(m_Color == ElementColour::BLACK);
+	onColourUpdates(pCmdUI, ElementColour::BLACK);
 }
 
 void CSketchAppDoc::OnUpdateColourRed(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetCheck(m_Color == ElementColour::RED);
+	onColourUpdates(pCmdUI, ElementColour::RED);
 }
 
 void CSketchAppDoc::OnUpdateColourGreen(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetCheck(m_Color == ElementColour::GREEN);
+	onColourUpdates(pCmdUI, ElementColour::GREEN);
 }
 
 void CSketchAppDoc::OnUpdateColourBlue(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetCheck(m_Color == ElementColour::BLUE);
+	onColourUpdates(pCmdUI, ElementColour::BLUE);
 }
 
 void CSketchAppDoc::OnUpdateElementLine(CCmdUI* pCmdUI)
@@ -243,4 +278,9 @@ void CSketchAppDoc::OnUpdateElementCircle(CCmdUI* pCmdUI)
 void CSketchAppDoc::OnUpdateElementCurve(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_Element == ElementType::CURVE);
+}
+
+void CSketchAppDoc::OnUpdateElementEllipse(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_Element == ElementType::ELLIPSE);
 }

@@ -1,3 +1,3 @@
 #pragma once
 
-enum class ElementType{LINE, RECTANGLE, CIRCLE, CURVE};
+enum class ElementType{LINE, RECTANGLE, CIRCLE, CURVE, ELLIPSE};
