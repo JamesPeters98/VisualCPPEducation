@@ -48,6 +48,9 @@
     <ClInclude Include="ElementColour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sketch App.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

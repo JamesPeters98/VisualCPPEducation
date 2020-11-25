@@ -27,6 +27,9 @@ BEGIN_MESSAGE_MAP(CSketchAppView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CSketchAppView construction/destruction
@@ -51,14 +54,20 @@ BOOL CSketchAppView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CSketchAppView drawing
 
-void CSketchAppView::OnDraw(CDC* /*pDC*/)
+void CSketchAppView::OnDraw(CDC* pDC)
 {
 	CSketchAppDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
-	// TODO: add draw code for native data here
+	// Draw the sketch
+	for (auto iter = pDoc->begin(); iter != pDoc->end(); ++iter)
+		for (const auto& pElement : *pDoc)
+		{
+			if (pDC->RectVisible(pElement->GetEnclosingRect()))
+				pElement->Draw(pDC);
+		}
 }
 
 
@@ -103,3 +112,87 @@ CSketchAppDoc* CSketchAppView::GetDocument() const // non-debug version is inlin
 
 
 // CSketchAppView message handlers
+
+
+void CSketchAppView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// Record current position as starting pos.
+	m_FirstPoint = point;
+}
+
+
+void CSketchAppView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// Make sure there is an element
+	if (m_pTempElement)
+	{
+		// Add the element pointer to the sketch
+		GetDocument()->AddElement(m_pTempElement);
+		InvalidateRect(&m_pTempElement->GetEnclosingRect());
+		m_pTempElement.reset(); // Reset the element pointer
+	}
+}
+
+
+void CSketchAppView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// Define a Device Context object for the view
+	CClientDC aDC{ this }; // DC is for this view
+	if (nFlags & MK_LBUTTON) // Verify the left button is down
+	{
+		m_SecondPoint = point; // Save the current cursor position
+		if (m_pTempElement)
+		{
+			// An element was created previously
+			if (ElementType::CURVE == GetDocument()->GetElementType()) // A curve?
+			{ // We are drawing a curve so add a segment to the existing curve
+				std::dynamic_pointer_cast<CCurve>(m_pTempElement)->AddSegment(m_SecondPoint);
+				m_pTempElement->Draw(&aDC); // Now draw it
+				return; // We are done
+			}
+			else
+			{
+				// If we get to here it's not a curve so
+				// redraw the old element so it disappears from the view
+				aDC.SetROP2(R2_NOTXORPEN); // Set the drawing mode
+				m_pTempElement->Draw(&aDC); // Redraw the old element to erase it
+			}
+		}
+		// Create a temporary element of the type and color that
+		// is recorded in the document object, and draw it
+		m_pTempElement = CreateElement();
+		m_pTempElement->Draw(&aDC);
+	}
+}
+
+std::shared_ptr<CElement> CSketchAppView::CreateElement() const
+{
+	// Get a pointer to the document for this view
+	CSketchAppDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc); // Verify the pointer is good
+
+	// Get the current element color
+	COLORREF color{ static_cast<COLORREF>(pDoc->GetElementColor()) };
+	// Now select the element using the type stored in the document
+	switch (pDoc->GetElementType())
+	{
+	case ElementType::RECTANGLE:
+		return std::make_shared<CRectangle>(m_FirstPoint, m_SecondPoint, color);
+
+	case ElementType::CIRCLE:
+		return std::make_shared<CCircle>(m_FirstPoint, m_SecondPoint, color);
+
+	case ElementType::CURVE:
+		return std::make_shared<CCurve>(m_FirstPoint, m_SecondPoint, color);
+
+	case ElementType::LINE:
+		return std::make_shared<CLine>(m_FirstPoint, m_SecondPoint, color);
+
+	default:
+		// Something's gone wrong
+		AfxMessageBox(_T("Bad Element code"), MB_OK);
+		AfxAbort();
+		return nullptr;
+	}
+}
+

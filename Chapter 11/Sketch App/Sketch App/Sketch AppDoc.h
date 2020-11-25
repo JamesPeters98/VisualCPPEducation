@@ -1,12 +1,15 @@
-
 // Sketch AppDoc.h : interface of the CSketchAppDoc class
 //
 
-
 #pragma once
+#include <list>
+#include <memory>
+
+#include "Element.h"
 #include "ElementColour.h"
 #include "ElementType.h"
 
+using SketchIterator = std::list<std::shared_ptr<CElement>>::const_iterator;
 
 class CSketchAppDoc : public CDocument
 {
@@ -59,10 +62,28 @@ public:
 
 	ElementType GetElementType()const { return m_Element; }
 	ElementColour GetElementColor()const { return m_Color; }
+
+	// Add a sketch element
+	void AddElement(std::shared_ptr<CElement>& pElement)
+	{
+		m_Sketch.push_back(pElement);
+	}
+	
+	// Delete a sketch element
+	void DeleteElement(std::shared_ptr<CElement>& pElement)
+	{
+		m_Sketch.remove(pElement);
+	}
+
+	// Provide a begin iterator for the sketch
+	SketchIterator begin() const { return std::begin(m_Sketch); }
+	// Provide an end iterator for the sketch
+	SketchIterator end() const { return std::end(m_Sketch); }
 	
 protected:
 	ElementType m_Element {ElementType::LINE};
 	ElementColour m_Color {ElementColour::BLACK};
+	std::list<std::shared_ptr<CElement>> m_Sketch;
 public:
 	afx_msg void OnUpdateColourBlack(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateColourRed(CCmdUI* pCmdUI);
