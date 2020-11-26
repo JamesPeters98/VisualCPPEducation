@@ -118,11 +118,15 @@ void CSketchAppView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// Record current position as starting pos.
 	m_FirstPoint = point;
+	SetCapture();
 }
 
 
 void CSketchAppView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	if (this == GetCapture())
+		ReleaseCapture();
+	
 	// Make sure there is an element
 	if (m_pTempElement)
 	{
@@ -138,7 +142,7 @@ void CSketchAppView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// Define a Device Context object for the view
 	CClientDC aDC{ this }; // DC is for this view
-	if (nFlags & MK_LBUTTON) // Verify the left button is down
+	if ((nFlags & MK_LBUTTON) && (this == GetCapture())) // Verify the left button is down
 	{
 		m_SecondPoint = point; // Save the current cursor position
 		if (m_pTempElement)
@@ -187,6 +191,9 @@ std::shared_ptr<CElement> CSketchAppView::CreateElement() const
 
 	case ElementType::LINE:
 		return std::make_shared<CLine>(m_FirstPoint, m_SecondPoint, color);
+
+	case ElementType::ELLIPSE:
+		return std::make_shared<CEllipse>(m_FirstPoint, m_SecondPoint, color);
 
 	default:
 		// Something's gone wrong

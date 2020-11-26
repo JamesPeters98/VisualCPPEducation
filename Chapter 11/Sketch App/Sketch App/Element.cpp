@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Element.h"
 
-CElement::~CElement(){}
-CElement::CElement(){}
-
 CElement::CElement(const CPoint& start, COLORREF color, int penWidth)
 	: m_StartPoint {start}, m_PenWidth{penWidth}, m_Color{color}
 {
@@ -34,9 +31,6 @@ void CLine::Draw(CDC* pDC)
 
 	pDC->SelectObject(pOldPen);
 }
-
-CLine::CLine(){}
-CLine::~CLine(){}
 
 /**************************
  * CRectangle Class
@@ -75,9 +69,6 @@ void CRectangle::Draw(CDC* pDC)
 	pDC->SelectObject(pOldBrush); // Restore the old brush
 	pDC->SelectObject(pOldPen); // Restore the old pen
 }
-
-CRectangle::CRectangle(){}
-CRectangle::~CRectangle(){}
 
 /**************************
  * CCircle Class
@@ -121,9 +112,6 @@ void CCircle::Draw(CDC* pDC)
 	pDC->SelectObject(pOldPen); // Restore the old pen
 	pDC->SelectObject(pOldBrush); // Restore the old brush
 }
-
-CCircle::CCircle() {}
-CCircle::~CCircle() {}
 
 /**************************
  * CCurve Class
@@ -173,5 +161,36 @@ void CCurve::AddSegment(const CPoint& point)
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-CCurve::CCurve(){}
-CCurve::~CCurve(){}
+/**************************
+ * CEllipse Class
+ **************************/
+CEllipse::CEllipse(const CPoint& start, const CPoint& end, COLORREF color)
+	: CElement{start, color}
+{
+	m_EndPoint = end;
+
+	// Define the enclosing rectangle
+	m_EnclosingRect = CRect{ m_StartPoint.x, m_StartPoint.y,
+	m_EndPoint.x, m_EndPoint.y };
+	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
+}
+
+void CEllipse::Draw(CDC* pDC)
+{
+	// Create a pen for this object and initialize it
+	CPen aPen;
+	CreatePen(aPen);
+
+	CPen* pOldPen{ pDC->SelectObject(&aPen) }; // Select the pen
+
+	// Select a null brush
+	CBrush* pOldBrush{ dynamic_cast<CBrush*>(pDC->SelectStockObject(NULL_BRUSH)) };
+
+	// Now draw the circle
+	pDC->Ellipse(m_StartPoint.x, m_StartPoint.y,
+		m_EndPoint.x, m_EndPoint.y);
+
+	pDC->SelectObject(pOldPen); // Restore the old pen
+	pDC->SelectObject(pOldBrush); // Restore the old brush
+}
+

@@ -12,13 +12,13 @@ protected:
 	CRect m_EnclosingRect;
 
 public:
-	virtual ~CElement();
+	virtual ~CElement() = default;
 	virtual void Draw(CDC* pDC) {}
 
 	const CRect& GetEnclosingRect() const { return m_EnclosingRect; }
 
 protected:
-	CElement();
+	CElement() = default;
 	CElement(const CPoint& start, COLORREF color, int penWidth = 1);
 
 	// Create a pen
@@ -41,7 +41,7 @@ class CLine :
 {
 public:
 	void Draw(CDC* pDC) override;
-	virtual ~CLine(void);
+	virtual ~CLine() = default;
 
 	// Constructor for a line object
 	CLine(const CPoint& start, const CPoint& end, COLORREF aColor);
@@ -50,7 +50,7 @@ protected:
 	CPoint m_EndPoint; // End point of line
 	
 protected:
-	CLine(); // Default constructor should not be used
+	CLine() = default; // Default constructor should not be used
 };
 
 /**************************
@@ -61,14 +61,14 @@ class CRectangle :
 {
 public:
 	void Draw(CDC* pDC) override;
-	virtual ~CRectangle(void);
+	virtual ~CRectangle() = default;
 
 	// Constructor for a line object
 	CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor);
 
 protected:
 	CPoint m_BottomRight; // End point of line
-	CRectangle(); // Default constructor should not be used
+	CRectangle() = default; // Default constructor should not be used
 };
 
 /**************************
@@ -78,7 +78,7 @@ class CCircle :
 	public CElement
 {
 public:
-	virtual ~CCircle();
+	virtual ~CCircle() = default;
 	void Draw(CDC* pDC) override; // Function to display a circle
 
 	// Constructor for a circle object
@@ -86,7 +86,7 @@ public:
 
 protected:
 	CPoint m_BottomRight; // Bottom-right point for defining circle
-	CCircle(); // Default constructor - should not be used
+	CCircle() = default; // Default constructor - should not be used
 };
 
 /**************************
@@ -96,7 +96,7 @@ class CCurve :
 	public CElement
 {
 public:
-	virtual ~CCurve();
+	virtual ~CCurve() = default;
 	void Draw(CDC* pDC) override; // Function to display a curve
 	
 	// Constructor for a curve object
@@ -106,6 +106,22 @@ public:
 	
 protected:
 	std::vector<CPoint> m_Points; // Points defining the curve
-	CCurve(); // Default constructor - should not be used
+	CCurve() = default; // Default constructor - should not be used
 };
 
+/**************************
+ * CEllipse Class
+ **************************/
+class CEllipse : public CElement
+{
+public:
+	virtual ~CEllipse() = default;
+	void Draw(CDC* pDC) override; // Function to display a circle
+
+	// Constructor for a circle object
+	CEllipse(const CPoint& start, const CPoint& end, COLORREF color);
+
+protected:
+	CPoint m_EndPoint; // Bottom-right point for defining circle
+	CEllipse() = default; // Default constructor - should not be used
+};
