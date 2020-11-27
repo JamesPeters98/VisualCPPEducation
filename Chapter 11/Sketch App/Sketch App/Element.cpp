@@ -167,11 +167,12 @@ void CCurve::AddSegment(const CPoint& point)
 CEllipse::CEllipse(const CPoint& start, const CPoint& end, COLORREF color)
 	: CElement{start, color}
 {
-	m_EndPoint = end;
+	int xLen {end.x - start.x};
+	int yLen {end.y - start.y};
 
 	// Define the enclosing rectangle
-	m_EnclosingRect = CRect{ m_StartPoint.x, m_StartPoint.y,
-	m_EndPoint.x, m_EndPoint.y };
+	m_EnclosingRect = CRect{ m_StartPoint.x - xLen, m_StartPoint.y - yLen,
+	m_StartPoint.x + xLen, m_StartPoint.y + yLen };
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
