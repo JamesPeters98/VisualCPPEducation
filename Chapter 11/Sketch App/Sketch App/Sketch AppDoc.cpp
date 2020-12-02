@@ -43,6 +43,14 @@ BEGIN_MESSAGE_MAP(CSketchAppDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_ELEMENT_CURVE, &CSketchAppDoc::OnUpdateElementCurve)
 	ON_COMMAND(ID_ELEMENT_ELLIPSE, &CSketchAppDoc::OnElementEllipse)
 	ON_UPDATE_COMMAND_UI(ID_ELEMENT_ELLIPSE, &CSketchAppDoc::OnUpdateElementEllipse)
+	ON_COMMAND(ID_PENSTYLE_SOLID, &CSketchAppDoc::OnPenstyleSolid)
+	ON_COMMAND(ID_PENSTYLE_DASHED, &CSketchAppDoc::OnPenstyleDashed)
+	ON_COMMAND(ID_PENSTYLE_DOTTED, &CSketchAppDoc::OnPenstyleDotted)
+	ON_COMMAND(ID_PENSTYLE_DASH, &CSketchAppDoc::OnPenstyleDashDotted)
+	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_SOLID, &CSketchAppDoc::OnUpdatePenstyleSolid)
+	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DASHED, &CSketchAppDoc::OnUpdatePenstyleDashed)
+	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DOTTED, &CSketchAppDoc::OnUpdatePenstyleDotted)
+	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DASH, &CSketchAppDoc::OnUpdatePenstyleDashDotted)
 END_MESSAGE_MAP()
 
 
@@ -210,7 +218,7 @@ void CSketchAppDoc::OnElementEllipse()
 	m_Element = ElementType::ELLIPSE;
 }
 
-void CSketchAppDoc::onColourUpdates(CCmdUI* pCmdUI, ElementColour colour)
+void CSketchAppDoc::doUpperCase(CCmdUI* pCmdUI, ElementColour colour)
 {
 	pCmdUI->SetCheck(m_Color == colour);
 
@@ -236,25 +244,48 @@ void CSketchAppDoc::onColourUpdates(CCmdUI* pCmdUI, ElementColour colour)
 	}
 }
 
+void CSketchAppDoc::OnPenstyleSolid()
+{
+	m_PenStyle = PS_SOLID;
+}
+
+
+void CSketchAppDoc::OnPenstyleDashed()
+{
+	m_PenStyle = PS_DASH;
+}
+
+
+void CSketchAppDoc::OnPenstyleDotted()
+{
+	m_PenStyle = PS_DOT;
+}
+
+
+void CSketchAppDoc::OnPenstyleDashDotted()
+{
+	m_PenStyle = PS_DASHDOT;
+}
+
 
 void CSketchAppDoc::OnUpdateColourBlack(CCmdUI* pCmdUI)
 {
-	onColourUpdates(pCmdUI, ElementColour::BLACK);
+	doUpperCase(pCmdUI, ElementColour::BLACK);
 }
 
 void CSketchAppDoc::OnUpdateColourRed(CCmdUI* pCmdUI)
 {
-	onColourUpdates(pCmdUI, ElementColour::RED);
+	doUpperCase(pCmdUI, ElementColour::RED);
 }
 
 void CSketchAppDoc::OnUpdateColourGreen(CCmdUI* pCmdUI)
 {
-	onColourUpdates(pCmdUI, ElementColour::GREEN);
+	doUpperCase(pCmdUI, ElementColour::GREEN);
 }
 
 void CSketchAppDoc::OnUpdateColourBlue(CCmdUI* pCmdUI)
 {
-	onColourUpdates(pCmdUI, ElementColour::BLUE);
+	doUpperCase(pCmdUI, ElementColour::BLUE);
 }
 
 void CSketchAppDoc::OnUpdateElementLine(CCmdUI* pCmdUI)
@@ -283,4 +314,31 @@ void CSketchAppDoc::OnUpdateElementCurve(CCmdUI* pCmdUI)
 void CSketchAppDoc::OnUpdateElementEllipse(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_Element == ElementType::ELLIPSE);
+}
+
+
+
+
+
+void CSketchAppDoc::OnUpdatePenstyleSolid(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_PenStyle == PS_SOLID);
+}
+
+
+void CSketchAppDoc::OnUpdatePenstyleDashed(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_PenStyle == PS_DASH);
+}
+
+
+void CSketchAppDoc::OnUpdatePenstyleDotted(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_PenStyle == PS_DOT);
+}
+
+
+void CSketchAppDoc::OnUpdatePenstyleDashDotted(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_PenStyle == PS_DASHDOT);
 }

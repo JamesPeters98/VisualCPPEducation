@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Element.h"
 
-CElement::CElement(const CPoint& start, COLORREF color, int penWidth)
-	: m_StartPoint {start}, m_PenWidth{penWidth}, m_Color{color}
+CElement::CElement(const CPoint& start, COLORREF color, int penStyle, int penWidth)
+	: m_StartPoint{ start }, m_PenWidth{ penWidth }, m_PenStyle{ penStyle }, m_Color{ color }
 {
 	
 }
@@ -10,8 +10,8 @@ CElement::CElement(const CPoint& start, COLORREF color, int penWidth)
 /**************************
  * CLine Class
  **************************/
-CLine::CLine(const CPoint& start, const CPoint& end, COLORREF aColor)
-	: CElement{start, aColor}, m_EndPoint{end}
+CLine::CLine(const CPoint& start, const CPoint& end, COLORREF aColor, int penStyle)
+	: CElement{start, aColor, penStyle}, m_EndPoint{end}
 {
 	// Define the enclosing rectangle
 	m_EnclosingRect = CRect{ start, end };
@@ -35,7 +35,7 @@ void CLine::Draw(CDC* pDC)
 /**************************
  * CRectangle Class
  **************************/
-CRectangle::CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor) : CElement {start, aColor}
+CRectangle::CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor, int penStyle) : CElement {start, aColor, penStyle}
 {
 	// Normalise the rectangle defining points
 	m_StartPoint = CPoint{ (std::min)(start.x, end.x), (std::min)(start.y, end.y) };
@@ -73,8 +73,8 @@ void CRectangle::Draw(CDC* pDC)
 /**************************
  * CCircle Class
  **************************/
-CCircle::CCircle(const CPoint& start, const CPoint& end, COLORREF color)
-	: CElement{ start, color }
+CCircle::CCircle(const CPoint& start, const CPoint& end, COLORREF color, int penStyle)
+	: CElement{ start, color, penStyle }
 {
 	// Calculate the radius using floating-point values
 	// because that is required by sqrt() function (in cmath)
@@ -116,8 +116,8 @@ void CCircle::Draw(CDC* pDC)
 /**************************
  * CCurve Class
  **************************/
-CCurve::CCurve(const CPoint& first, const CPoint& second, COLORREF color)
-	: CElement{first, color}
+CCurve::CCurve(const CPoint& first, const CPoint& second, COLORREF color, int penStyle)
+	: CElement{first, color, penStyle}
 {
 	m_Points.push_back(second);
 	m_EnclosingRect = CRect{
@@ -164,15 +164,18 @@ void CCurve::AddSegment(const CPoint& point)
 /**************************
  * CEllipse Class
  **************************/
-CEllipse::CEllipse(const CPoint& start, const CPoint& end, COLORREF color)
-	: CElement{start, color}
+CEllipse::CEllipse(const CPoint& start, const CPoint& end, COLORREF color, int penStyle)
+	: CElement{start, color, penStyle}
 {
 	int xLen {end.x - start.x};
 	int yLen {end.y - start.y};
 
+	m_StartPoint = CPoint{ start.x - xLen, start.y - yLen };
+	m_EndPoint = CPoint{ end.x + xLen, end.y + yLen };
+
 	// Define the enclosing rectangle
-	m_EnclosingRect = CRect{ m_StartPoint.x - xLen, m_StartPoint.y - yLen,
-	m_StartPoint.x + xLen, m_StartPoint.y + yLen };
+	m_EnclosingRect = CRect{ m_StartPoint.x, m_StartPoint.y,
+	start.x + xLen, start.y + yLen };
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 

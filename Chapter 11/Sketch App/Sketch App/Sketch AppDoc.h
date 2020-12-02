@@ -62,6 +62,7 @@ public:
 
 	ElementType GetElementType()const { return m_Element; }
 	ElementColour GetElementColor()const { return m_Color; }
+	int GetPenStyle()const { return m_PenStyle; }
 
 	// Add a sketch element
 	void AddElement(std::shared_ptr<CElement>& pElement)
@@ -83,6 +84,7 @@ public:
 protected:
 	ElementType m_Element {ElementType::LINE};
 	ElementColour m_Color {ElementColour::BLACK};
+	int m_PenStyle{ PS_SOLID };
 	std::list<std::shared_ptr<CElement>> m_Sketch;
 public:
 	afx_msg void OnUpdateColourBlack(CCmdUI* pCmdUI);
@@ -94,6 +96,14 @@ public:
 	afx_msg void OnUpdateElementCircle(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateElementCurve(CCmdUI* pCmdUI);
 	afx_msg void OnElementEllipse();
-	void onColourUpdates(CCmdUI* pCmdUI, ElementColour colour);
+	void doUpperCase(CCmdUI* pCmdUI, ElementColour colour);
 	afx_msg void OnUpdateElementEllipse(CCmdUI* pCmdUI);
+	afx_msg void OnPenstyleSolid();
+	afx_msg void OnPenstyleDashed();
+	afx_msg void OnPenstyleDotted();
+	afx_msg void OnPenstyleDashDotted();
+	afx_msg void OnUpdatePenstyleSolid(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePenstyleDashed(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePenstyleDotted(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePenstyleDashDotted(CCmdUI* pCmdUI);
 };

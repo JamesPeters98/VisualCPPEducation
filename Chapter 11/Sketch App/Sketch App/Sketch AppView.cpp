@@ -177,23 +177,24 @@ std::shared_ptr<CElement> CSketchAppView::CreateElement() const
 
 	// Get the current element color
 	COLORREF color{ static_cast<COLORREF>(pDoc->GetElementColor()) };
+	int penStyle{ pDoc->GetPenStyle() };
 	// Now select the element using the type stored in the document
 	switch (pDoc->GetElementType())
 	{
 	case ElementType::RECTANGLE:
-		return std::make_shared<CRectangle>(m_FirstPoint, m_SecondPoint, color);
+		return std::make_shared<CRectangle>(m_FirstPoint, m_SecondPoint, color, penStyle);
 
 	case ElementType::CIRCLE:
-		return std::make_shared<CCircle>(m_FirstPoint, m_SecondPoint, color);
+		return std::make_shared<CCircle>(m_FirstPoint, m_SecondPoint, color, penStyle);
 
 	case ElementType::CURVE:
-		return std::make_shared<CCurve>(m_FirstPoint, m_SecondPoint, color);
+		return std::make_shared<CCurve>(m_FirstPoint, m_SecondPoint, color, penStyle);
 
 	case ElementType::LINE:
-		return std::make_shared<CLine>(m_FirstPoint, m_SecondPoint, color);
+		return std::make_shared<CLine>(m_FirstPoint, m_SecondPoint, color, penStyle);
 
 	case ElementType::ELLIPSE:
-		return std::make_shared<CEllipse>(m_FirstPoint, m_SecondPoint, color);
+		return std::make_shared<CEllipse>(m_FirstPoint, m_SecondPoint, color, penStyle);
 
 	default:
 		// Something's gone wrong

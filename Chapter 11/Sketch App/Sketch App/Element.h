@@ -10,6 +10,7 @@ protected:
 	int m_PenWidth;
 	COLORREF m_Color;
 	CRect m_EnclosingRect;
+	int m_PenStyle;
 
 public:
 	virtual ~CElement() = default;
@@ -19,12 +20,12 @@ public:
 
 protected:
 	CElement() = default;
-	CElement(const CPoint& start, COLORREF color, int penWidth = 1);
+	CElement(const CPoint& start, COLORREF color, int penStyle = PS_SOLID, int penWidth = 1);
 
 	// Create a pen
 	void CreatePen(CPen& aPen)
 	{
-		if (!aPen.CreatePen(PS_SOLID, m_PenWidth, m_Color))
+		if (!aPen.CreatePen(m_PenStyle, m_PenWidth, m_Color))
 		{
 			// Pen creation failed
 			AfxMessageBox(_T("Pen creation failed"), MB_OK);
@@ -44,7 +45,7 @@ public:
 	virtual ~CLine() = default;
 
 	// Constructor for a line object
-	CLine(const CPoint& start, const CPoint& end, COLORREF aColor);
+	CLine(const CPoint& start, const CPoint& end, COLORREF aColor, int penStyle);
 
 protected:
 	CPoint m_EndPoint; // End point of line
@@ -64,7 +65,7 @@ public:
 	virtual ~CRectangle() = default;
 
 	// Constructor for a line object
-	CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor);
+	CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor, int penStyle);
 
 protected:
 	CPoint m_BottomRight; // End point of line
@@ -82,7 +83,7 @@ public:
 	void Draw(CDC* pDC) override; // Function to display a circle
 
 	// Constructor for a circle object
-	CCircle(const CPoint& start, const CPoint& end, COLORREF color);
+	CCircle(const CPoint& start, const CPoint& end, COLORREF color, int penStyle);
 
 protected:
 	CPoint m_BottomRight; // Bottom-right point for defining circle
@@ -100,7 +101,7 @@ public:
 	void Draw(CDC* pDC) override; // Function to display a curve
 	
 	// Constructor for a curve object
-	CCurve(const CPoint& first, const CPoint& second, COLORREF color);
+	CCurve(const CPoint& first, const CPoint& second, COLORREF color, int penStyle);
 	
 	void AddSegment(const CPoint& point); // Add a segment to the curve
 	
@@ -119,7 +120,7 @@ public:
 	void Draw(CDC* pDC) override; // Function to display a circle
 
 	// Constructor for a circle object
-	CEllipse(const CPoint& start, const CPoint& end, COLORREF color);
+	CEllipse(const CPoint& start, const CPoint& end, COLORREF color, int penStyle);
 
 protected:
 	CPoint m_EndPoint; // Bottom-right point for defining circle
