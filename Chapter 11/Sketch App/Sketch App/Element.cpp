@@ -19,10 +19,10 @@ CLine::CLine(const CPoint& start, const CPoint& end, COLORREF aColor, int penSty
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-void CLine::Draw(CDC* pDC)
+void CLine::Draw(CDC* pDC, std::shared_ptr<CElement> pElement)
 {
 	CPen aPen;
-	CreatePen(aPen);
+	CreatePen(aPen, pElement);
 
 	CPen* pOldPen{ pDC->SelectObject(&aPen) };
 
@@ -30,6 +30,13 @@ void CLine::Draw(CDC* pDC)
 	pDC->LineTo(m_EndPoint);
 
 	pDC->SelectObject(pOldPen);
+}
+
+void CLine::Move(const CSize& aSize)
+{
+	m_StartPoint += aSize; // Move the start point
+	m_EndPoint += aSize; // and the end point
+	m_EnclosingRect += aSize; // Move the enclosing rectangle
 }
 
 /**************************
@@ -52,11 +59,18 @@ CRectangle::CRectangle(const CPoint& start, const CPoint& end, COLORREF aColor, 
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-void CRectangle::Draw(CDC* pDC)
+void CRectangle::Move(const CSize& aSize)
+{
+	m_StartPoint += aSize; // Move the start point
+	m_BottomRight += aSize; // Move the bottom right point
+	m_EnclosingRect += aSize; // Move the enclosing rectangle
+}
+
+void CRectangle::Draw(CDC* pDC, std::shared_ptr<CElement> pElement)
 {
 	// Create a pen for this object and initialize it
 	CPen aPen;
-	CreatePen(aPen);
+	CreatePen(aPen, pElement);
 
 	// Select the pen and the null brush
 	CPen* pOldPen{ pDC->SelectObject(&aPen) };
@@ -94,11 +108,11 @@ CCircle::CCircle(const CPoint& start, const CPoint& end, COLORREF color, int pen
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-void CCircle::Draw(CDC* pDC)
+void CCircle::Draw(CDC* pDC, std::shared_ptr<CElement> pElement)
 {
 	// Create a pen for this object and initialize it
 	CPen aPen;
-	CreatePen(aPen);
+	CreatePen(aPen, pElement);
 
 	CPen* pOldPen{ pDC->SelectObject(&aPen) }; // Select the pen
 
@@ -111,6 +125,13 @@ void CCircle::Draw(CDC* pDC)
 
 	pDC->SelectObject(pOldPen); // Restore the old pen
 	pDC->SelectObject(pOldBrush); // Restore the old brush
+}
+
+void CCircle::Move(const CSize& aSize)
+{
+	m_StartPoint += aSize; // Move the start point
+	m_BottomRight += aSize; // Move the bottom right point
+	m_EnclosingRect += aSize; // Move the enclosing rectangle
 }
 
 /**************************
@@ -127,11 +148,11 @@ CCurve::CCurve(const CPoint& first, const CPoint& second, COLORREF color, int pe
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-void CCurve::Draw(CDC* pDC)
+void CCurve::Draw(CDC* pDC, std::shared_ptr<CElement> pElement)
 {
 	// Create a pen for this object and initialize it
 	CPen aPen;
-	CreatePen(aPen);
+	CreatePen(aPen, pElement);
 
 	CPen* pOldPen{ pDC->SelectObject(&aPen) }; // Select the pen
 
@@ -142,6 +163,15 @@ void CCurve::Draw(CDC* pDC)
 
 	pDC->SelectObject(pOldPen); // Restore the old pen
 
+}
+
+void CCurve::Move(const CSize& aSize)
+{
+	m_EnclosingRect += aSize; // Move the rectangle
+	m_StartPoint += aSize; // Move the start point
+	// Now move all the other points
+	for (auto& p : m_Points)
+		p += aSize;
 }
 
 void CCurve::AddSegment(const CPoint& point)
@@ -175,15 +205,15 @@ CEllipse::CEllipse(const CPoint& start, const CPoint& end, COLORREF color, int p
 
 	// Define the enclosing rectangle
 	m_EnclosingRect = CRect{ m_StartPoint.x, m_StartPoint.y,
-	start.x + xLen, start.y + yLen };
+	m_EndPoint.x, m_EndPoint.y };
 	m_EnclosingRect.InflateRect(m_PenWidth, m_PenWidth);
 }
 
-void CEllipse::Draw(CDC* pDC)
+void CEllipse::Draw(CDC* pDC, std::shared_ptr<CElement> pElement)
 {
 	// Create a pen for this object and initialize it
 	CPen aPen;
-	CreatePen(aPen);
+	CreatePen(aPen, pElement);
 
 	CPen* pOldPen{ pDC->SelectObject(&aPen) }; // Select the pen
 
@@ -196,5 +226,12 @@ void CEllipse::Draw(CDC* pDC)
 
 	pDC->SelectObject(pOldPen); // Restore the old pen
 	pDC->SelectObject(pOldBrush); // Restore the old brush
+}
+
+void CEllipse::Move(const CSize& aSize)
+{
+	m_StartPoint += aSize; // Move the start point
+	m_EndPoint += aSize; // Move the bottom right point
+	m_EnclosingRect += aSize; // Move the enclosing rectangle
 }
 

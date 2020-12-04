@@ -342,3 +342,14 @@ void CSketchAppDoc::OnUpdatePenstyleDashDotted(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_PenStyle == PS_DASHDOT);
 }
+
+
+std::shared_ptr<CElement> CSketchAppDoc::FindElement(const CPoint& point)const
+{
+	for (const auto& element : m_Sketch)
+	{
+		if (element->GetEnclosingRect().PtInRect(point))
+			return element;
+	}
+	return nullptr;
+}

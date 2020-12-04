@@ -68,12 +68,14 @@ public:
 	void AddElement(std::shared_ptr<CElement>& pElement)
 	{
 		m_Sketch.push_back(pElement);
+		UpdateAllViews(nullptr, 0, pElement.get());
 	}
 	
 	// Delete a sketch element
 	void DeleteElement(std::shared_ptr<CElement>& pElement)
 	{
 		m_Sketch.remove(pElement);
+		UpdateAllViews(nullptr, 0, pElement.get());
 	}
 
 	// Provide a begin iterator for the sketch
@@ -106,4 +108,6 @@ public:
 	afx_msg void OnUpdatePenstyleDashed(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePenstyleDotted(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePenstyleDashDotted(CCmdUI* pCmdUI);
+	std::shared_ptr<CElement> FindElement(const CPoint& point)const
+	;
 };
