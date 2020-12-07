@@ -353,3 +353,14 @@ std::shared_ptr<CElement> CSketchAppDoc::FindElement(const CPoint& point)const
 	}
 	return nullptr;
 }
+
+
+void CSketchAppDoc::SendToBack(std::shared_ptr<CElement>& pElement)
+{
+	if(pElement)
+	{
+		auto pos = std::find(m_Sketch.begin(), m_Sketch.end(), pElement);
+		if (pos != m_Sketch.end()) m_Sketch.erase(pos);
+		m_Sketch.push_back(pElement);
+	}
+}

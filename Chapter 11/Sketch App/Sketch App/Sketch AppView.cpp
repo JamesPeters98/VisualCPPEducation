@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CSketchAppView, CScrollView)
 	ON_COMMAND(ID_ELEMENT_MOVE, &CSketchAppView::OnElementMove)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
+	ON_COMMAND(ID_ELEMENT_SENDTOBACK, &CSketchAppView::OnElementSendtoback)
 END_MESSAGE_MAP()
 
 // CSketchAppView construction/destruction
@@ -386,4 +387,10 @@ void CSketchAppView::OnRButtonUp(UINT nFlags, CPoint point)
 	{
 		CScrollView::OnRButtonUp(nFlags, point);
 	}
+}
+
+
+void CSketchAppView::OnElementSendtoback()
+{
+	GetDocument()->SendToBack(m_pSelected);
 }

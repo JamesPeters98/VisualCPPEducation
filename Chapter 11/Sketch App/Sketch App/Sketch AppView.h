@@ -71,6 +71,7 @@ public:
 	afx_msg void OnElementMove();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnElementSendtoback();
 };
 
 #ifndef _DEBUG  // debug version in Sketch AppView.cpp

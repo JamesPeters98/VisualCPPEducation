@@ -4,6 +4,7 @@
 #include <vector>
 
 static const COLORREF SELECT_COLOR{ RGB(255,0,180) };
+static const int SELECT_PEN_STYLE{PS_DASHDOTDOT};
 
 class CElement :
     public CObject
@@ -29,7 +30,7 @@ protected:
 	// Create a pen
 	void CreatePen(CPen& aPen, std::shared_ptr<CElement> pElement = nullptr)
 	{
-		if (!aPen.CreatePen(m_PenStyle, m_PenWidth, this == pElement.get() ? SELECT_COLOR : m_Color))
+		if (!aPen.CreatePen(this == pElement.get() ? SELECT_PEN_STYLE : m_PenStyle, m_PenWidth, this == pElement.get() ? SELECT_COLOR : m_Color))
 		{
 			// Pen creation failed
 			AfxMessageBox(_T("Pen creation failed"), MB_OK);
