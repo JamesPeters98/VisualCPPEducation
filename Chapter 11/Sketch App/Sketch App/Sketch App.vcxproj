@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h" />
+    <ClInclude Include="CPenDialog.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ElementColour.h" />
     <ClInclude Include="ElementType.h" />
@@ -198,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
+    <ClCompile Include="CPenDialog.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">

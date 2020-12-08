@@ -112,4 +112,5 @@ public:
 	std::shared_ptr<CElement> FindElement(const CPoint& point)const
 	;
 	void SendToBack(std::shared_ptr<CElement>& pElement);
+	afx_msg void OnPenWidth();
 };

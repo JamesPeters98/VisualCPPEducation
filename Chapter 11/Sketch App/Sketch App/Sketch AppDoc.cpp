@@ -16,6 +16,8 @@
 #include <iostream>
 #include <propkey.h>
 
+#include "CPenDialog.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -51,6 +53,7 @@ BEGIN_MESSAGE_MAP(CSketchAppDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DASHED, &CSketchAppDoc::OnUpdatePenstyleDashed)
 	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DOTTED, &CSketchAppDoc::OnUpdatePenstyleDotted)
 	ON_UPDATE_COMMAND_UI(ID_PENSTYLE_DASH, &CSketchAppDoc::OnUpdatePenstyleDashDotted)
+	ON_COMMAND(ID_PEN_WIDTH, &CSketchAppDoc::OnPenWidth)
 END_MESSAGE_MAP()
 
 
@@ -363,4 +366,11 @@ void CSketchAppDoc::SendToBack(std::shared_ptr<CElement>& pElement)
 		if (pos != m_Sketch.end()) m_Sketch.erase(pos);
 		m_Sketch.push_back(pElement);
 	}
+}
+
+
+void CSketchAppDoc::OnPenWidth()
+{
+	CPenDialog dialog;
+	dialog.DoModal();
 }
